@@ -3,16 +3,17 @@
     <h1>Todos App</h1>
     <div id="todoApp">
       <input type="text" v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo" class="addBox"/>
-      <input type="checkbox" name="showCompleted" v-on:change="toggleCompleted">
+      <input type="checkbox" name="showCompleted" v-model="showCompleted">
       <label for="showCompleted">Show Completed</label>
-      <button v-on:click="clearTodos">Clear All</button>
+      <button v-on:click="clearTodos" class="btn btn-outline-danger">Clear All</button>
+      <hr>
       <div v-show="todos.length == 0">
         No Items To Show
       </div>
-      <div v-for="(todo, index) in todos" v-if="!todo.isComplete || !showCompleted" v-on:click="editTodo(index)" class="todo">
+      <div v-for="(todo, index) in todos" v-if="!todo.isComplete || showCompleted" v-on:click="editTodo(index)" class="todo">
         <div>
           <input type="checkbox" name="isCompleted" v-on:change="completeTodo(index)" class="todoCheck" v-model="todo.showCompleted"/>
-          <p v-bind:class="{completed: todo.isCompleted}" v-on:click="editTodo(index)" class="todoText" v-if="editIndex != index">{{todo.text}}</p>
+          <label v-bind:class="{completed: todo.isCompleted}" v-on:click="editTodo(index)" class="todoText" v-if="editIndex != index">{{todo.text}}</label>
           <input type="text" v-on:keyup.enter="updateTodo(index)" v-model="todo.text" class="editBox active" v-else/>
         </div>
         <div>
@@ -21,7 +22,7 @@
         <div class="todoInfo">
           <span v-if="todo.lastModified === 'Never'">Created: {{todo.dateCreated | formatDate}}</span>
           <span v-else>Modified: {{todo.lastModified | formatDate}}</span>
-          <button v-on:click="deleteTodo(index)">X</button>      
+          <button v-on:click="deleteTodo(index)" class="btn btn-danger">X</button>      
         </div>
       </div>
       <div>
@@ -60,9 +61,6 @@
       },
       clearTodos: function () {
         this.todos = []
-      },
-      toggleCompleted: function () {
-        this.showCompleted = !this.showCompleted
       },
       editTodo: function (i) {
         this.editIndex = i
@@ -113,7 +111,8 @@
   }
   .todo {
     border-bottom: 1px solid black;
-    height: 60px;
+    padding-top: 10px;
+    height: 80px;
   }
   .todoCheck {
     float: left;
@@ -128,6 +127,10 @@
   .completed {
     text-decoration: line-through;
   }
+  .todoText {
+    font-size: 16px;
+    width: 94%;
+  }
   .todoText:hover {
     cursor: pointer;
   }
@@ -139,8 +142,10 @@
     -moz-box-shadow: none;
     box-shadow: none;
     padding: 0;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
+    width: 94%;
+    margin-bottom: 0.5em;
   }
   .editBox:focus {
     outline: none;
