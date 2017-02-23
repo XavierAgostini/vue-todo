@@ -2,7 +2,7 @@
   <div>
     <h1>Todos App</h1>
     <div id="todoApp">
-      <input type="text" v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo" class="addBox" />
+      <input type="text" v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo" class="addBox"/>
       <input type="checkbox" name="showCompleted" v-on:change="toggleCompleted">
       <label for="showCompleted">Show Completed</label>
       <button v-on:click="clearTodos">Clear All</button>
@@ -12,13 +12,15 @@
       <div v-for="(todo, index) in todos" v-if="!todo.isComplete || !showCompleted" v-on:click="editTodo(index)" class="todo">
         <div>
           <input type="checkbox" name="isCompleted" v-on:change="completeTodo(index)" class="todoCheck" v-model="todo.showCompleted"/>
-          <label v-bind:class="{completed: todo.isCompleted}">{{todo.text}}</label>
+          <p v-bind:class="{completed: todo.isCompleted}" v-on:click="editTodo(index)" class="todoText" v-if="editIndex != index">{{todo.text}}</p>
+          <input type="text" v-on:keyup.enter="updateTodo(index)" v-model="todo.text" class="editBox active" v-else/>
         </div>
         <div>
             
         </div>
         <div class="todoInfo">
-          <span>{{todo.dateCreated}}</span>
+          <span v-if="todo.lastModified === 'Never'">Created: {{todo.dateCreated | formatDate}}</span>
+          <span v-else>Modified: {{todo.lastModified | formatDate}}</span>
           <button v-on:click="deleteTodo(index)">X</button>      
         </div>
       </div>
@@ -30,12 +32,14 @@
 </template>
 
 <script>
+  import moment from 'moment'
   export default {
     data () {
       return {
         newTodoText: '',
         todos: [],
-        showCompleted: true
+        showCompleted: true,
+        editIndex: -1
       }
     },
     methods: {
@@ -43,7 +47,8 @@
         this.todos.push({
           'text': this.newTodoText,
           'isComplete': false,
-          'dateCreated': new Date()
+          'dateCreated': moment(),
+          'lastModified': 'Never'
         })
         this.newTodoText = ''
       },
@@ -60,7 +65,11 @@
         this.showCompleted = !this.showCompleted
       },
       editTodo: function (i) {
-        this.todos[i].text += ' test'
+        this.editIndex = i
+      },
+      updateTodo: function (i) {
+        this.editIndex = -1
+        this.todos[i].lastModified = moment()
       }
     },
     filters: {
@@ -70,6 +79,11 @@
           if (todos[i].isComplete) count++
         }
         return count
+      },
+      formatDate: function (val) {
+        if (val) {
+          return moment(String(val)).format('MMMM Do YYYY, h:mm a')
+        }
       }
     }
   }
@@ -89,6 +103,14 @@
     margin: 0 auto;
     background-color: #fff;
   }
+  input[name="showCompleted"] {
+    float: left;
+    margin-left: 10px;
+  }
+  label[for="showCompleted"] {
+    float: left;
+    margin-left: 10px;
+  }
   .todo {
     border-bottom: 1px solid black;
     height: 60px;
@@ -105,5 +127,22 @@
   }
   .completed {
     text-decoration: line-through;
+  }
+  .todoText:hover {
+    cursor: pointer;
+  }
+  .editBox {
+    border:none;
+    background-image:none;
+    background-color:transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0;
+    font-size: 20px;
+    text-align: center;
+  }
+  .editBox:focus {
+    outline: none;
   }
 </style>
