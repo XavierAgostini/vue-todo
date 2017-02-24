@@ -3,13 +3,13 @@
     <h1 class="centerText">Todos App</h1>
     <div id="todoApp">
       <div class="addBox">
-        <input type="checkbox" v-model="toggleAll" class="toggleBtn" v-on:change="toggleTodos"/>
+        <input type="checkbox" v-model="toggleAll" class="toggleBtn" v-on:change="toggleTodos" v-show="todos.length>0"/>
         <input type="text" v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo ..." v-focus class="addInput"/>
       </div>
-      <div v-for="(todo, index) in todos" v-if="!todo.isComplete || showCompleted" v-on:click="editTodo(index)" class="todo">
+      <div v-for="(todo, index) in todos" v-if="!todo.isComplete || showCompleted" class="todo">
         <input type="checkbox" name="isCompleted" v-model="todo.isComplete" v-on:change="completeTodo(index)" class="todoCheck" />
         <label v-on:click="editTodo(index)" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}" v-if="editIndex != index">{{todo.text}}</label>
-        <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-else class="editBox" v-focus>
+        <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-on:blur="updateTodo(index)" v-else class="editBox" v-focus>
         <button v-on:click="deleteTodo(index)" class="del-todo btn btn-danger">X</button>      
       </div>
       <div v-show="todos.length > 0" class="todoInfo">
@@ -22,6 +22,7 @@
     </div>
     <br>
     <div class="instructionText">
+    <i class="glyphicon glyphicon-menu-down"></i>
       <p>To Add a todo: Type your todo in the "Add todo" box then hit enter to add it</p>
       <p>To Edit a todo: Double click to edit todo</p>
       <p>To Delete a todo: Hover over todo and hit the close button
@@ -60,6 +61,7 @@
       },
       completeTodo: function (i) {
         this.todos[i].isComplete = this.todos[i].isComplete || false
+        this.toggleAll = false
       },
       editTodo: function (i) {
         this.editIndex = i
@@ -88,8 +90,9 @@
 
 <style scoped>
   .addBox {
-     border: 2px solid #ddd;
-     height: 65px;
+    position: relative;
+    border: 2px solid #ddd;
+    height: 65px;
   }
   .addBox .addInput {
     width: 440px; 
@@ -97,17 +100,21 @@
     margin-top: 10px;
     font-size: 25px;
     padding: 0;
-    margin: 10px 0 0 20px;
+    margin: 10px 0 0 50px;
     border: none;
   }
   .addBox .addInput:focus {
     outline: none;
   }
   .toggleBtn {
-    margin-left: 10px;
+    position: absolute;
+    top: 12px;
+    left: 25px;
+    /*margin-left: 10px;*/
     appearance: none;
     transform: rotate(90deg);
     color: #ddd;
+    outline: none;
   }
   .toggleBtn:before {
     content: ">";
@@ -189,8 +196,6 @@
     margin-bottom: 0.5em;
     padding: 15px 60px 15px 15px;
     margin-left: 45px;
-  }
-  .editBox:focus {
     outline: none;
   }
   .todoInfo {
