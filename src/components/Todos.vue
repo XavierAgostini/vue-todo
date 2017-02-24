@@ -7,7 +7,8 @@
       </div>
       <div v-for="(todo, index) in todos" v-if="!todo.isComplete || showCompleted" v-on:click="editTodo(index)" class="todo">
         <input type="checkbox" name="isCompleted" v-on:change="completeTodo(index)" class="todoCheck" v-model="todo.showCompleted"/>
-        <label v-bind:class="{completed: todo.isCompleted}" v-on:click="editTodo(index)" class="todoText">{{todo.text}}</label>
+        <label v-bind:class="{completed: todo.isCompleted}" v-on:click="editTodo(index)" class="todoText"v-if="editIndex != index">{{todo.text}}</label>
+        <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-else class="editBox">
         <button v-on:click="deleteTodo(index)" class="del-todo btn btn-danger">X</button>      
       </div>
       <div>
@@ -28,7 +29,6 @@
 </template>
 
 <script>
-  import moment from 'moment'
   export default {
     data () {
       return {
@@ -42,9 +42,7 @@
       addNewTodo: function () {
         this.todos.push({
           'text': this.newTodoText,
-          'isComplete': false,
-          'dateCreated': moment(),
-          'lastModified': 'Never'
+          'isComplete': false
         })
         this.newTodoText = ''
       },
@@ -59,7 +57,6 @@
       },
       updateTodo: function (i) {
         this.editIndex = -1
-        this.todos[i].lastModified = moment()
       }
     },
     filters: {
@@ -69,11 +66,6 @@
           if (todos[i].isComplete) count++
         }
         return count
-      },
-      formatDate: function (val) {
-        if (val) {
-          return moment(String(val)).format('MMMM Do YYYY, h:mm a')
-        }
       }
     }
   }
@@ -155,13 +147,12 @@
     border:none;
     background-image:none;
     background-color:transparent;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
     box-shadow: none;
-    padding: 0;
     font-size: 16px;
     width: 400px;
     margin-bottom: 0.5em;
+    padding: 15px 60px 15px 15px;
+    margin-left: 45px;
   }
   .editBox:focus {
     outline: none;
