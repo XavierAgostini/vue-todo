@@ -10,7 +10,7 @@
         <input type="checkbox" name="isCompleted" v-model="todo.isComplete" v-on:change="completeTodo(index)" class="todoCheck" />
         <label v-on:click="editTodo(index)" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}" v-if="editIndex != index">{{todo.text}}</label>
         <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-on:blur="updateTodo(index)" v-else class="editBox" v-focus>
-        <button v-on:click="deleteTodo(index)" class="del-todo btn btn-danger">X</button>      
+        <button v-on:click="deleteTodo(index)" class="del-todo btn btn-outline-danger">X</button>      
       </div>
       <div v-show="todos.length > 0" class="todoInfo">
         <input type="checkbox" name="showCompleted" v-model="showCompleted">
@@ -106,9 +106,12 @@
   .addBox .addInput:focus {
     outline: none;
   }
+  .del-todo {
+    padding: 4px 8px;
+  }
   .toggleBtn {
     position: absolute;
-    top: 12px;
+    top: 15px;
     left: 25px;
     /*margin-left: 10px;*/
     appearance: none;
@@ -118,6 +121,7 @@
   }
   .toggleBtn:before {
     content: ">";
+    font-family: Roboto;
     font-size: 25px;
   }
   .toggleBtn:checked {
