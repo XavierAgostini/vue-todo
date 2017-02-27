@@ -5,18 +5,51 @@ Vue.use(Vuex)
 
 // root state object
 const state = {
-  todos: []
+  toggleAll: false,
+  newTodoText: '',
+  todos: [],
+  showCompleted: true,
+  editIndex: -1
 }
 
 // mutations change the state
 const mutations = {
-  addTodo (todo) {
-    state.todos.push(todo)
+  addTodo: function () {
+    state.todos.push({
+      'text': state.newTodoText,
+      'isComplete': false
+    })
+    state.newTodoText = ''
+  },
+  deleteTodo: function (i) {
+    state.todos.splice(i, 1)
+  },
+  completeTodo: function (i) {
+    state.todos[i].isComplete = state.todos[i].isComplete || false
+    state.toggleAll = false
+  },
+  editTodo: function (i) {
+    state.editIndex = i
+  },
+  updateTodo: function (i) {
+    state.editIndex = -1
+  },
+  toggleTodos: function () {
+    for (var i = 0; i < state.todos.length; i++) {
+      state.todos[i].isComplete = state.toggleAll
+    }
   }
 }
 
 // actions
-const actions = {}
+const actions = {
+  addTodo: ({commit}) => commit('addTodo'),
+  completeTodo: ({commit}) => commit('completeTodo'),
+  deleteTodo: ({commit}) => commit('deleteTodo'),
+  editTodo: ({commit}) => commit('editTodo'),
+  toggleTodos: ({commit}) => commit('toggleTodos'),
+  updateTodo: ({commit}) => commit('updateTodo')
+}
 
 // getters are functions
 const getters = {}

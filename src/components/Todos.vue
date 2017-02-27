@@ -202,15 +202,6 @@
     margin-left: 45px;
     outline: none;
   }
-  .todoInfo {
-    position: relative;
-    border: 2px solid #ddd;
-    border-top: none;
-    text-align: right;
-  }
-  .todoInfo span {
-    padding-right: 10px;
-  }
   input[name="showCompleted"] {
     margin-top: 5px;
     margin-right: 5px;
