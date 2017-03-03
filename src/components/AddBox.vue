@@ -1,16 +1,22 @@
 <template>
 	<div class="addBox">
     <input type="checkbox" v-model="$store.state.toggleAll" class="toggleBtn" v-on:change="toggleTodos" v-show="$store.state.todos.length>0"/>
-    <input type="text" v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo ..." v-focus class="addInput"/>
+    <input type="text" v-model="$store.state.newTodoText" v-on:keyup.enter="addTodo" placeholder="Add a todo ..." v-focus class="addInput"/>
   </div>
 </template>
 
 <script>
-	import { mapGetters, mapActions } from 'vuex'
-	export default {
-	  computed: mapGetters([]),
-	  methods: mapActions(['addTodo', 'toggleTodos'])
-	}
+  import {mapActions} from 'vuex'
+  export default {
+    directives: {
+      focus: {
+        inserted: function (el) {
+          el.focus()
+        }
+      }
+    },
+    methods: mapActions(['addTodo', 'toggleTodos'])
+  }
 </script>
 
 <style scoped>
@@ -30,5 +36,24 @@
   }
   .addBox .addInput:focus {
     outline: none;
+  }
+  
+  .toggleBtn {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    /*margin-left: 10px;*/
+    appearance: none;
+    transform: rotate(90deg);
+    color: #ddd;
+    outline: none;
+  }
+  .toggleBtn:before {
+    content: ">";
+    font-family: Roboto;
+    font-size: 25px;
+  }
+  .toggleBtn:checked {
+    color: black;
   }
 </style>

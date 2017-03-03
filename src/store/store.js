@@ -7,34 +7,41 @@ Vue.use(Vuex)
 const state = {
   toggleAll: false,
   newTodoText: '',
-  todos: [],
+  todos: [
+    {
+      'text': 'test todo message',
+      'isComplete': false
+    }
+  ],
   showCompleted: true,
   editIndex: -1
 }
 
 // mutations change the state
 const mutations = {
-  addTodo: function () {
+  addTodo: function (state) {
     state.todos.push({
       'text': state.newTodoText,
       'isComplete': false
     })
     state.newTodoText = ''
   },
-  deleteTodo: function (i) {
-    state.todos.splice(i, 1)
+  deleteTodo: function (state, todo) {
+    var index = state.todos.indexOf(todo)
+    state.todos.splice(index, 1)
   },
-  completeTodo: function (i) {
-    state.todos[i].isComplete = state.todos[i].isComplete || false
+  completeTodo: function (state, todo) {
+    todo.isComplete = todo.isComplete || false
     state.toggleAll = false
   },
-  editTodo: function (i) {
-    state.editIndex = i
+  editTodo: function (state, todo) {
+    var index = state.todos.indexOf(todo)
+    state.editIndex = index
   },
-  updateTodo: function (i) {
+  updateTodo: function (state, {todo}) {
     state.editIndex = -1
   },
-  toggleTodos: function () {
+  toggleTodos: function (state) {
     for (var i = 0; i < state.todos.length; i++) {
       state.todos[i].isComplete = state.toggleAll
     }
@@ -44,8 +51,8 @@ const mutations = {
 // actions
 const actions = {
   addTodo: ({commit}) => commit('addTodo'),
-  completeTodo: ({commit}) => commit('completeTodo'),
-  deleteTodo: ({commit}) => commit('deleteTodo'),
+  completeTodo: ({commit}, todo) => commit('completeTodo', todo),
+  deleteTodo: ({commit}, todo) => commit('deleteTodo', todo),
   editTodo: ({commit}) => commit('editTodo'),
   toggleTodos: ({commit}) => commit('toggleTodos'),
   updateTodo: ({commit}) => commit('updateTodo')

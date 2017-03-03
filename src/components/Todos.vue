@@ -3,7 +3,7 @@
     <h1 class="centerText">Todos App</h1>
     <div id="todoApp">
       <add-box></add-box>
-      <todo v-for="(todo, index) in $store.state.todos"></todo>
+      <todo v-for="(todo, index) in $store.state.todos" :key="index" :todo="todo" v-show="!todo.isComplete || $store.state.showCompleted"></todo>
       <todo-info></todo-info>
     </div>
     <br>
@@ -27,15 +27,6 @@
       'todo': Todo,
       'todo-info': TodoInfo
     },
-    data () {
-      return {
-        // toggleAll: false,
-        // newTodoText: '',
-        // todos: [],
-        // showCompleted: true,
-        // editIndex: -1
-      }
-    },
     directives: {
       focus: {
         inserted: function (el) {
@@ -49,31 +40,6 @@
 </script>
 
 <style scoped>
-  
-  .del-todo {
-    padding: 4px 8px;
-  }
-  .toggleBtn {
-    position: absolute;
-    top: 15px;
-    left: 25px;
-    /*margin-left: 10px;*/
-    appearance: none;
-    transform: rotate(90deg);
-    color: #ddd;
-    outline: none;
-  }
-  .toggleBtn:before {
-    content: ">";
-    font-family: Roboto;
-    font-size: 25px;
-  }
-  .toggleBtn:checked {
-    color: black;
-  }
-  .centerText {
-    text-align: center;
-  }
   #todoApp {
     width: 500px;
     margin: 0 auto;
@@ -81,7 +47,9 @@
     /*border: 2px solid #ddd;*/
     box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.5);
   }
- 
+  .centerText {
+    text-align: center;
+  }
   .instructionText {
     font-size: 12px;
     width: 500px;

@@ -1,29 +1,24 @@
 <template>
-  <div  v-show="!todo.isComplete || showCompleted" class="todo">
-    <input type="checkbox" name="isCompleted" v-model="$store.state.todo.isComplete" v-on:change="completeTodo(index)" class="todoCheck" />
-    <label v-on:click="editTodo(index)" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}" v-if="editIndex != index">{{todo.text}}</label>
-    <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-on:blur="updateTodo(index)" v-else class="editBox" v-focus>
-    <button v-on:click="deleteTodo(index)" class="del-todo btn btn-outline-danger">X</button>     
+  <div v-show="!todo.isComplete || $store.state.showCompleted" class="todo">
+    <input type="checkbox" name="isCompleted" v-model="todo.isComplete" v-on:change="completeTodo(todo)" class="todoCheck" />
+    <label v-on:click="editTodo({todo})" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}">{{todo.text}}</label>
+    <!-- <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(todo)" v-on:blur="updateTodo(todo)" class="editBox" v-focus> -->
+    <button v-on:click="deleteTodo(todo)" class="del-todo btn btn-outline-danger">X</button>     
   </div>
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
   export default {
-    data () {
-
-    },
-
-    computed: mapGetters([
-
-    ]),
-    methods: mapActions([
-      'addTodo',
-      'completeTodo',
-      'deleteTodo',
-      'editTodo',
-      'updateTodo'
-    ])
+    props: ['todo'],
+    methods: {
+      ...mapActions([
+        'completeTodo',
+        'deleteTodo',
+        'editTodo',
+        'updateTodo'
+      ])
+    }
   }
 </script>
 
@@ -54,11 +49,20 @@
     text-decoration: line-through;
     color: #ddd;
   }
+  .todoText {
+    font-size: 16px;
+    width: 400px;
+    padding: 15px 60px 15px 15px;
+    margin-left: 45px;
+  }
   .todoText:hover {
     cursor: pointer;
   }
   .del-todo {
     display: none;
+  }
+  .todo:hover .del-todo{
+    display: inline-block;
   }  
   .editBox {
     border:none;
