@@ -1,6 +1,6 @@
 <template>
-  <div class="todo">
-    <input type="checkbox" name="isCompleted" v-model="todo.isComplete" v-on:change="completeTodo(index)" class="todoCheck" />
+  <div  v-show="!todo.isComplete || showCompleted" class="todo">
+    <input type="checkbox" name="isCompleted" v-model="$store.state.todo.isComplete" v-on:change="completeTodo(index)" class="todoCheck" />
     <label v-on:click="editTodo(index)" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}" v-if="editIndex != index">{{todo.text}}</label>
     <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(index)" v-on:blur="updateTodo(index)" v-else class="editBox" v-focus>
     <button v-on:click="deleteTodo(index)" class="del-todo btn btn-outline-danger">X</button>     
@@ -8,13 +8,22 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex'
   export default {
     data () {
 
     },
-    methods: {
 
-    }
+    computed: mapGetters([
+
+    ]),
+    methods: mapActions([
+      'addTodo',
+      'completeTodo',
+      'deleteTodo',
+      'editTodo',
+      'updateTodo'
+    ])
   }
 </script>
 
