@@ -1,8 +1,8 @@
 <template>
   <div v-show="!todo.isComplete || $store.state.showCompleted" class="todo">
     <input type="checkbox" name="isCompleted" v-model="todo.isComplete" v-on:change="completeTodo(todo)" class="todoCheck" />
-    <label v-on:click="editTodo({todo})" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}">{{todo.text}}</label>
-    <!-- <input type="text" v-model="todo.text" v-on:keyup.enter="updateTodo(todo)" v-on:blur="updateTodo(todo)" class="editBox" v-focus> -->
+    <label v-if="!editable" v-on:dblclick="toggleEdit(true)" class="todoText" v-bind:class="{todoCompleted : todo.isComplete}">{{todo.text}}</label>
+    <input v-else type="text" v-model="todo.text" v-on:keyup.enter="toggleEdit(false)" v-on:blur="toggleEdit(false)" v-focus class="editBox">
     <button v-on:click="deleteTodo(todo)" class="del-todo btn btn-outline-danger">X</button>     
   </div>
 </template>
@@ -10,14 +10,28 @@
 <script>
   import { mapActions } from 'vuex'
   export default {
+    data () {
+      return {
+        editable: false
+      }
+    },
     props: ['todo'],
     methods: {
       ...mapActions([
         'completeTodo',
         'deleteTodo',
-        'editTodo',
-        'updateTodo'
-      ])
+        'editTodo'
+      ]),
+      toggleEdit: function (state) {
+        this.editable = state
+      }
+    },
+    directives: {
+      focus: {
+        inserted: function (el) {
+          el.focus()
+        }
+      }
     }
   }
 </script>

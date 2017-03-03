@@ -34,13 +34,6 @@ const mutations = {
     todo.isComplete = todo.isComplete || false
     state.toggleAll = false
   },
-  editTodo: function (state, todo) {
-    var index = state.todos.indexOf(todo)
-    state.editIndex = index
-  },
-  updateTodo: function (state, {todo}) {
-    state.editIndex = -1
-  },
   toggleTodos: function (state) {
     for (var i = 0; i < state.todos.length; i++) {
       state.todos[i].isComplete = state.toggleAll
@@ -54,8 +47,7 @@ const actions = {
   completeTodo: ({commit}, todo) => commit('completeTodo', todo),
   deleteTodo: ({commit}, todo) => commit('deleteTodo', todo),
   editTodo: ({commit}) => commit('editTodo'),
-  toggleTodos: ({commit}) => commit('toggleTodos'),
-  updateTodo: ({commit}) => commit('updateTodo')
+  toggleTodos: ({commit}) => commit('toggleTodos')
 }
 
 // getters are functions

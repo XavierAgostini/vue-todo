@@ -33,6 +33,7 @@
   label[for="showCompleted"] {
     float: left;
     margin-left: 10px;
+    margin-right: 170px;
   }
   
   input[name="showCompleted"] {
