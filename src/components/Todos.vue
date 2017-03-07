@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="centerText">Todos App</h1>
+    <h1 id="appTitle" class="centerText">Todos App</h1>
     <div id="todoApp">
       <add-box></add-box>
       <todo v-for="(todo, index) in $store.state.todos" :key="index" :todo="todo" v-show="!todo.isComplete || $store.state.showCompleted"></todo>
