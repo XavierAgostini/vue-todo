@@ -7,12 +7,7 @@ Vue.use(Vuex)
 const state = {
   toggleAll: false,
   newTodoText: '',
-  todos: [
-    {
-      'text': 'test todo message',
-      'isComplete': false
-    }
-  ],
+  todos: JSON.parse(window.localStorage.getItem('vueTodos') || '[]'),
   showCompleted: true,
   editIndex: -1
 }
@@ -55,10 +50,14 @@ const getters = {}
 
 // A Vuex instance is created by combining the state, mutations,
 // actions and getters
-
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state,
   getters,
   actions,
   mutations
 })
+// On state change update localstorage of todos
+store.subscribe((mutations, {todos}) => {
+  window.localStorage.setItem('vueTodos', JSON.stringify(todos))
+})
+export default store
